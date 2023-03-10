@@ -28,11 +28,11 @@ pipeline{
             steps{
                 echo "Stage test"
             }
-        }
-        post{
-            cleanup{
-                echo "Post cleanup"
-            }
+        }   
+    }
+    post{
+        cleanup{
+            echo "Post cleanup"
         }
     }
 }
