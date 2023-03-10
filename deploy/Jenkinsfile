@@ -2,48 +2,37 @@ pipeline{
     agent any
 
     parameters{
-        booleanParam(name : 'BUILD_DOCKER_IMAGE',defaultValue : true, description: 'BUILD_DOCKER_IMAGE')
-        booleanParam(name : 'RUN_TEST',defaultValue : true, description: 'RUN_TEST')
-        booleanParam(name : 'PUSH_DOCKER_IMAGE',defaultValue : true, description: 'PUSH_DOCKER_IMAGE')
-
-        environment{
-            REGION = "ap-northeast-2"
-        }
-
-        stages{
-            stage('============== Build Docker Image =============='){
-                  when {
+        booleanParam(name : 'BUILD_DOCKER_IMAGE',defaultValue : true, description : 'BUILD_DOCKER_IMAGE')
+        booleanParam(name : 'RUN_TEST',defaultValue : true, description : 'RUN_TEST')
+        booleanParam(name : 'PUSH_DOCKER_IMAGE',defaultValue : true, description : 'PUSH_DOCKER_IMAGE')
+    }
+    environment{
+        REGION = 'ap-northeast-2'
+    }
+    stages{
+        stage('========= Build Docker image ========='){
+            when{
                 expression{return params.BUILD_DOCKER_IMAGE}
-              }
-              steps{
-                echo "Stage Build"
-              }
-              post{
+            }
+            steps{
+                echo "Stage build"
+            }
+            post{
                 always{
                     echo "post stage"
                 }
-              }
-            }
-            stage('============== Run Test Code=============='){
-              when{expression {return params.RUN_TEST}}
-              steps{
-                echo "Stage Test"
-              }
-            }
-            stage('============== Push Docker Image=============='){
-              when{expression {return params.PUSH_DOCKER_IMAGE}}
-              steps{
-                echo "Stage Test"
-              }
-            } 
-            post{
-              cleanup{
-                ech "Post Cleanup"
-              }
             }
         }
-
+        stage('========= Run test code ========='){
+            when {expression {return params.RUN_TEST}}
+            steps{
+                echo "Stage test"
+            }
         }
-        
-        
+        post{
+            cleanup{
+                echo "Post cleanup"
+            }
+        }
     }
+}
